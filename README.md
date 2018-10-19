@@ -5,7 +5,7 @@ Logonet is a convolutional neural network model to detect brand logo in the give
 
 it can detect the following brand logo's: (updated - 19/10/2018)
 
-```['ups','dhl','fedex','apple','cocacola']```
+``['ups','dhl','fedex','apple','cocacola']``
 
 
 ### Example usage:
@@ -14,8 +14,9 @@ it can detect the following brand logo's: (updated - 19/10/2018)
 
 ### Example(API):
 
-```cd logonet_app``
-```python ln_main_app.py```
+``cd logonet_app
+
+python ln_main_app.py``
 
 ![example2](https://github.com/jagadeesh-kotra/LogoNet/blob/master/logonet-api.png)
 
