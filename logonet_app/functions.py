@@ -17,7 +17,7 @@ def pp_nd_ss(image_dir):
     img = Image.fromarray(img).resize((640, 480))
     img = np.array(img)
 
-    img_lbl, regions = selectivesearch.selective_search(img, scale=300, sigma=0.9, min_size=20)
+    img_lbl, regions = selectivesearch.selective_search(img, scale=300, sigma=0, min_size=20)
 
     candidates = []
 
@@ -52,7 +52,7 @@ def load_labelenc(pickle_dir):
     return labenc
 
 def predict(model,img_array):
-    print('Input Shape',img_array.shape)
+    # print('Input Shape',img_array.shape) #uncomment for debug
     return model.predict_proba(img_array,10)
 
 
