@@ -1,7 +1,5 @@
 from flask import Flask, jsonify, request
 import json
-import numpy as np
-np.seterr(divide='ignore', invalid='ignore')
 from functions import load_k_model,load_labelenc,predict,max_predict,pp_nd_ss
 
 app = Flask(__name__)
