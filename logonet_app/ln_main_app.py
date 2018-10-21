@@ -19,13 +19,18 @@ image_vault = "cache/image.jpg"
 @app.route("/logonet",methods=['POST'])
 def hello():
     c = 0
+    target_parameter = None
+    for key in request.args.keys():
+        if key == 'target':
+            target_parameter = request.args[key]
+
     ret_res = {}
     for key in request.files.keys():
         print(key)
         request.files["{}".format(key)].save(image_vault)
         arr,cand = pp_nd_ss(image_vault)
         predictions = predict(model,arr)
-        res = max_predict(predictions,label_encoder,api=True)
+        res = max_predict(predictions,cand,label_encoder,target_parameter,api=True)
         ret_res[c] = res
         c = c+1
 

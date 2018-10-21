@@ -56,16 +56,38 @@ def predict(model,img_array):
     return model.predict_proba(img_array,10)
 
 
-def max_predict(predictions,label_encoder,api=False):
+def max_predict(predictions,cand,label_encoder,target_list,api=False):
     prediction_result = []
     prediction_prob = []
 
+    target_flag = False
+
+    if target_list is not None:
+        target_flag = True
+
     for pred in predictions:
-        prediction_prob.append(pred.max())
-        prediction_result.append(label_encoder.inverse_transform([np.argmax(pred,axis=0)]))
+        if target_flag:
+            if label_encoder.inverse_transform([np.argmax(pred,axis=0)]) in target_list:
+                prediction_prob.append(pred.max())
+                prediction_result.append(label_encoder.inverse_transform([np.argmax(pred,axis=0)]))
+        if target_flag == False:
+            prediction_prob.append(pred.max())
+            prediction_result.append(label_encoder.inverse_transform([np.argmax(pred,axis=0)]))
 
     max_prob = prediction_prob.index(max(prediction_prob))
     if api is True:
-        return {'prediction': prediction_result[max_prob][0],'probability': str(max(prediction_prob))}
+        x,y,w,h = cand[max_prob]
+        return {
+        'prediction': prediction_result[max_prob][0],
+        'probability': str(max(prediction_prob)),
+
+        'bbox': {'resize_canvas': '640x480','xywh': {
+                'x': str(x),
+                'y': str(y),
+                'w': str(w),
+                'h': str(h),
+                 }
+                 }
+                 }
     else:
-        pass    
+        pass
