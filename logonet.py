@@ -30,7 +30,7 @@ def pp_nd_ss(image_dir):
     img = Image.fromarray(img).resize((640, 480))
     img = np.array(img)
 
-    img_lbl, regions = selectivesearch.selective_search(img, scale=300, sigma=0.9, min_size=20)
+    img_lbl, regions = selectivesearch.selective_search(img, scale=500, sigma=0, min_size=20)
 
     candidates = []
 
@@ -82,6 +82,8 @@ def max_predict(predictions,api=False):
     prediction_prob = []
 
     for pred in predictions:
+        if label_encoder.inverse_transform([np.argmax(pred,axis=0)]) == 'apple':
+            continue
         prediction_prob.append(pred.max())
         prediction_result.append(label_encoder.inverse_transform([np.argmax(pred,axis=0)]))
 

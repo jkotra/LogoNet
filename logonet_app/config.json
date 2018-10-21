@@ -1,5 +1,5 @@
 {
-"Model_Path": "../models/logonet01.h5",
-"Label_Encoder_Path": "../labels/logonet01.pickle",
+"Model_Path": "../models/logonet02.h5",
+"Label_Encoder_Path": "../labels/logonet02.pickle",
 "target": "None"
 }
