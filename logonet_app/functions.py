@@ -67,7 +67,7 @@ def max_predict(predictions,cand,label_encoder,target_list,api=False):
 
     for pred in predictions:
         if target_flag:
-            if label_encoder.inverse_transform([np.argmax(pred,axis=0)]) in target_list:
+            if label_encoder.inverse_transform([np.argmax(pred,axis=0)])[0] in target_list:
                 prediction_prob.append(pred.max())
                 prediction_result.append(label_encoder.inverse_transform([np.argmax(pred,axis=0)]))
         if target_flag == False:
