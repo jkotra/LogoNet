@@ -19,8 +19,15 @@ parser.add_argument('--i', action="store", required=True)
 parser.add_argument('--o', action="store", required=False)
 parser.add_argument('--model', action="store", required=True)
 parser.add_argument('--label', action="store", required=True)
+parser.add_argument('--target', action="store", required=False)
 
 ap = parser.parse_args()
+
+if ap.target:
+    arg_target = ap.target
+else:
+    arg_target = None
+
 
 def pp_nd_ss(image_dir):
     global img
@@ -30,7 +37,7 @@ def pp_nd_ss(image_dir):
     img = Image.fromarray(img).resize((640, 480))
     img = np.array(img)
 
-    img_lbl, regions = selectivesearch.selective_search(img, scale=500, sigma=0, min_size=20)
+    img_lbl, regions = selectivesearch.selective_search(img, scale=500, sigma=0, min_size=500)
 
     candidates = []
 
@@ -45,7 +52,7 @@ def pp_nd_ss(image_dir):
         x, y, w, h = r['rect']
         if h is 0 or w is 0:
             continue
-        if w / h > 3 or h / w > 3:
+        if w / h > 2 or h / w > 2:
             continue
         candidates.append(r['rect'])
 
@@ -77,24 +84,44 @@ ssr = np.array(ssr) / 255
 prediction = predict(model,ssr)
 
 
-def max_predict(predictions,api=False):
+def max_predict(predictions,cand,label_encoder,target_list,api=False):
     prediction_result = []
     prediction_prob = []
 
+    target_flag = False
+
+    if target_list is not None:
+        target_flag = True
+
     for pred in predictions:
-        if label_encoder.inverse_transform([np.argmax(pred,axis=0)]) == 'apple':
-            continue
-        prediction_prob.append(pred.max())
-        prediction_result.append(label_encoder.inverse_transform([np.argmax(pred,axis=0)]))
+        if target_flag:
+            if label_encoder.inverse_transform([np.argmax(pred,axis=0)])[0] in target_list:
+                prediction_prob.append(pred.max())
+                prediction_result.append(label_encoder.inverse_transform([np.argmax(pred,axis=0)]))
+        if target_flag == False:
+            prediction_prob.append(pred.max())
+            prediction_result.append(label_encoder.inverse_transform([np.argmax(pred,axis=0)]))
 
     max_prob = prediction_prob.index(max(prediction_prob))
     if api is True:
-        return {'prediction': prediction_result[max_prob],'probability': max(prediction_prob)}
+        x,y,w,h = cand[max_prob]
+        return {
+        'prediction': prediction_result[max_prob][0],
+        'probability': str(max(prediction_prob)),
+
+        'bbox': {'resize_canvas': '640x480','xywh': {
+                'x': str(x),
+                'y': str(y),
+                'w': str(w),
+                'h': str(h),
+                 }
+                 }
+                 }
     else:
-        return prediction_result,prediction_prob,max_prob
+        return prediction_result,prediction_prob,max_prob,cand
 
 
-prediction_result,prediction_prob,max_prob = max_predict(prediction)
+prediction_result,prediction_prob,max_prob,cand = max_predict(prediction,cand,label_encoder,arg_target)
 
 print(prediction_result[max_prob],'=>',max(prediction_prob))
 

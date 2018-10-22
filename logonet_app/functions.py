@@ -17,7 +17,7 @@ def pp_nd_ss(image_dir):
     img = Image.fromarray(img).resize((640, 480))
     img = np.array(img)
 
-    img_lbl, regions = selectivesearch.selective_search(img, scale=500, sigma=0, min_size=20)
+    img_lbl, regions = selectivesearch.selective_search(img, scale=500, sigma=0, min_size=500)
 
     candidates = []
 
@@ -32,7 +32,7 @@ def pp_nd_ss(image_dir):
         x, y, w, h = r['rect']
         if h is 0 or w is 0:
             continue
-        if w / h > 3 or h / w > 3:
+        if w / h > 2 or h / w > 2:
             continue
         candidates.append(r['rect'])
 
@@ -90,4 +90,4 @@ def max_predict(predictions,cand,label_encoder,target_list,api=False):
                  }
                  }
     else:
-        pass
+        return prediction_result,prediction_prob,max_prob
