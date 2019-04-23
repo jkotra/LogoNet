@@ -10,7 +10,7 @@ import pickle
 import argparse
 
 """  
-    github = @jagadeesh-kotra
+    github = @jkotra
  """
 
 parser = argparse.ArgumentParser()
