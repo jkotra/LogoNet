@@ -10,7 +10,7 @@ it can detect the following brand logo's: (updated - 21/10/2018)
 
 ### Example usage:
 
-![example1](https://raw.githubusercontent.com/jagadeesh-kotra/LogoNet/master/logonet.png)
+![example1](https://raw.githubusercontent.com/jagadeesh-kotra/LogoNet/master/misc/logonet.png)
 
 ### Example(API):
 
@@ -18,7 +18,7 @@ it can detect the following brand logo's: (updated - 21/10/2018)
 
 ```python ln_main_app.py```
 
-![example2](https://github.com/jagadeesh-kotra/LogoNet/blob/master/logonet-api.png)
+![example2](https://github.com/jagadeesh-kotra/LogoNet/blob/master/misc/logonet-api.png)
 
 ### Credits: 
 
